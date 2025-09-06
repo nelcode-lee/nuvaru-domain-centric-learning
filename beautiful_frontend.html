@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuvaru - Domain-Centric Learning Platform</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .message-bubble {
+            max-width: 80%;
+            padding: 16px 24px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-user {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            margin-left: auto;
+        }
+        
+        .message-ai {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            color: #374151;
+            margin-right: auto;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .transition-all {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
+            border-radius: 4px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #2563eb, #1e40af);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="glass-effect shadow-lg border-b border-white/20 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">N</span>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold gradient-text">Nuvaru</h1>
+                            <p class="text-sm text-gray-600 font-medium">Domain-Centric Learning Platform</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <!-- Navigation Links -->
+                    <div class="flex space-x-2">
+                        <a href="index.html" class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">🏠 Portal</a>
+                        <a href="simple_documents.html" class="px-3 py-1 text-sm bg-green-100 hover:bg-green-200 text-green-700 rounded-lg transition-colors">📚 Documents</a>
+                        <a href="http://localhost:8000/docs" target="_blank" class="px-3 py-1 text-sm bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg transition-colors">📖 API Docs</a>
+                    </div>
+                    <div class="flex items-center space-x-2 px-3 py-1.5 bg-green-100 rounded-full">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span class="text-sm font-medium text-green-700">System Online</span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-2 text-sm text-gray-600">
+                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-md font-medium">Private AI</span>
+                        <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-md font-medium">Air-Gapped Ready</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-72 glass-effect shadow-xl border-r border-white/20 min-h-screen">
+            <nav class="mt-8 px-6">
+                <ul class="space-y-3">
+                    <li>
+                        <button onclick="showTab('chat')" id="chat-tab" class="w-full group relative overflow-hidden rounded-2xl transition-all duration-300 bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/25 transform scale-105">
+                            <div class="flex items-center px-4 py-4">
+                                <div class="text-2xl mr-4 transition-transform duration-300 scale-110">💬</div>
+                                <div class="text-left">
+                                    <div class="font-semibold text-lg">AI Chat</div>
+                                    <div class="text-sm text-blue-100">Ask questions about documents</div>
+                                </div>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"></div>
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showTab('documents')" id="documents-tab" class="w-full group relative overflow-hidden rounded-2xl transition-all duration-300 bg-white/50 hover:bg-white/80 text-gray-700 hover:text-gray-900 hover:shadow-lg hover:scale-105">
+                            <div class="flex items-center px-4 py-4">
+                                <div class="text-2xl mr-4 transition-transform duration-300 group-hover:scale-110">📚</div>
+                                <div class="text-left">
+                                    <div class="font-semibold text-lg">Knowledge Base</div>
+                                    <div class="text-sm text-gray-500">View uploaded documents</div>
+                                </div>
+                            </div>
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showTab('upload')" id="upload-tab" class="w-full group relative overflow-hidden rounded-2xl transition-all duration-300 bg-white/50 hover:bg-white/80 text-gray-700 hover:text-gray-900 hover:shadow-lg hover:scale-105">
+                            <div class="flex items-center px-4 py-4">
+                                <div class="text-2xl mr-4 transition-transform duration-300 group-hover:scale-110">📤</div>
+                                <div class="text-left">
+                                    <div class="font-semibold text-lg">Upload</div>
+                                    <div class="text-sm text-gray-500">Add new documents</div>
+                                </div>
+                            </div>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-white/20">
+                <div class="text-center">
+                    <div class="text-xs text-gray-500 mb-2">Nuvaru Platform</div>
+                    <div class="text-sm font-semibold text-gray-700">Version 1.0.0</div>
+                    <div class="mt-2 flex items-center justify-center space-x-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span class="text-xs text-gray-600">RAG System Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <!-- Chat Tab -->
+            <div id="chat-content" class="max-w-5xl mx-auto">
+                <div class="mb-8">
+                    <h1 class="text-4xl font-bold gradient-text mb-4">AI Knowledge Assistant</h1>
+                    <p class="text-lg text-gray-600 leading-relaxed">
+                        Ask questions about your uploaded documents and get AI-powered answers with source attribution.
+                    </p>
+                </div>
+                
+                <!-- Chat Interface -->
+                <div class="glass-effect rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+                    <!-- Messages -->
+                    <div id="messages" class="h-96 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+                        <div class="text-center py-12">
+                            <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+                                <span class="text-3xl">🤖</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-3">Start a conversation</h3>
+                            <p class="text-gray-600 mb-6">Ask questions about your documents to get AI-powered answers.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
+                                <button onclick="setMessage('What are the main topics in my documents?')" class="p-3 text-left bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 rounded-xl border border-blue-200 hover:border-blue-300 transition-all duration-200 text-sm font-medium text-gray-700 hover:text-gray-900">
+                                    What are the main topics in my documents?
+                                </button>
+                                <button onclick="setMessage('Summarize the key findings')" class="p-3 text-left bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 rounded-xl border border-blue-200 hover:border-blue-300 transition-all duration-200 text-sm font-medium text-gray-700 hover:text-gray-900">
+                                    Summarize the key findings
+                                </button>
+                                <button onclick="setMessage('Find information about specific topics')" class="p-3 text-left bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 rounded-xl border border-blue-200 hover:border-blue-300 transition-all duration-200 text-sm font-medium text-gray-700 hover:text-gray-900">
+                                    Find information about specific topics
+                                </button>
+                                <button onclick="setMessage('What insights can you provide?')" class="p-3 text-left bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 rounded-xl border border-blue-200 hover:border-blue-300 transition-all duration-200 text-sm font-medium text-gray-700 hover:text-gray-900">
+                                    What insights can you provide?
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Input -->
+                    <div class="border-t border-gray-200/50 p-6 bg-gradient-to-r from-gray-50/50 to-blue-50/50">
+                        <div class="flex space-x-4">
+                            <div class="flex-1 relative">
+                                <textarea
+                                    id="message-input"
+                                    placeholder="Ask a question about your documents..."
+                                    class="w-full px-4 py-3 pr-12 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200 placeholder-gray-500"
+                                    rows="2"
+                                    onkeypress="handleKeyPress(event)"
+                                ></textarea>
+                                <div class="absolute right-3 top-3 text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <button
+                                onclick="sendMessage()"
+                                class="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                            >
+                                <div class="flex items-center space-x-2">
+                                    <span>Send</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                    </svg>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Upload Tab -->
+            <div id="upload-content" class="max-w-5xl mx-auto hidden">
+                <div class="mb-8">
+                    <h1 class="text-4xl font-bold gradient-text mb-4">Upload Documents</h1>
+                    <p class="text-lg text-gray-600 leading-relaxed">Upload documents to build your knowledge base. Supported formats: TXT, MD, JSON, PDF.</p>
+                </div>
+                
+                <div class="glass-effect rounded-3xl shadow-2xl border border-white/20 p-8">
+                    <div class="text-center py-16">
+                        <div class="w-24 h-24 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-4xl">📤</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Drag and drop files here</h3>
+                        <p class="text-gray-600 mb-8 max-w-md mx-auto">
+                            Or click to select files from your computer. Documents will be automatically processed and added to your knowledge base.
+                        </p>
+                        <div class="max-w-md mx-auto">
+                            <input 
+                                type="file" 
+                                multiple 
+                                accept=".txt,.md,.json,.pdf" 
+                                id="file-input"
+                                onchange="handleFileSelect(event)"
+                                class="w-full p-4 border-2 border-dashed border-purple-300 rounded-2xl hover:border-purple-400 transition-colors duration-200 cursor-pointer"
+                            >
+                            <p class="text-sm text-gray-500 mt-4">Supported formats: TXT, MD, JSON, PDF (Max 10MB per file)</p>
+                            <div id="upload-progress" class="mt-4 hidden">
+                                <div class="bg-gray-200 rounded-full h-2">
+                                    <div id="progress-bar" class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                                </div>
+                                <p id="upload-status" class="text-sm text-gray-600 mt-2">Uploading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Tab -->
+            <div id="documents-content" class="max-w-5xl mx-auto hidden">
+                <div class="mb-8">
+                    <h1 class="text-4xl font-bold gradient-text mb-4">Knowledge Base</h1>
+                    <p class="text-lg text-gray-600 leading-relaxed">Access and manage your uploaded documents. All files are processed and ready for AI chat.</p>
+                </div>
+                
+                <div class="glass-effect rounded-3xl shadow-2xl border border-white/20 p-8">
+                    <div class="text-center py-16">
+                        <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-4xl">📚</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">View Your Documents</h3>
+                        <p class="text-gray-600 mb-8">Click below to access your uploaded documents and see their processing status.</p>
+                        
+                        <div class="space-y-4">
+                            <a href="http://localhost:8080/simple_documents.html" target="_blank" class="inline-block bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold py-4 px-8 rounded-2xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                                📄 View Documents
+                            </a>
+                            
+                            <div class="text-sm text-gray-500">
+                                <p>• 10 documents available</p>
+                                <p>• 373 chunks processed</p>
+                                <p>• Ready for AI chat</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <p class="text-sm text-gray-500 mb-4">Quick Actions:</p>
+                            <div class="flex flex-wrap gap-3 justify-center">
+                                <button onclick="showTab('upload')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm">
+                                    📤 Upload New Files
+                                </button>
+                                <button onclick="showTab('chat')" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm">
+                                    💬 Chat About Files
+                                </button>
+                                <a href="http://localhost:8000/docs" target="_blank" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm">
+                                    📖 API Docs
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let messages = [];
+        let isTyping = false;
+
+        function showTab(tabName) {
+            // Hide all content
+            document.getElementById('chat-content').classList.add('hidden');
+            document.getElementById('documents-content').classList.add('hidden');
+            document.getElementById('upload-content').classList.add('hidden');
+            
+            // Remove active styling from all tabs
+            document.getElementById('chat-tab').className = 'w-full group relative overflow-hidden rounded-2xl transition-all duration-300 bg-white/50 hover:bg-white/80 text-gray-700 hover:text-gray-900 hover:shadow-lg hover:scale-105';
+            document.getElementById('documents-tab').className = 'w-full group relative overflow-hidden rounded-2xl transition-all duration-300 bg-white/50 hover:bg-white/80 text-gray-700 hover:text-gray-900 hover:shadow-lg hover:scale-105';
+            document.getElementById('upload-tab').className = 'w-full group relative overflow-hidden rounded-2xl transition-all duration-300 bg-white/50 hover:bg-white/80 text-gray-700 hover:text-gray-900 hover:shadow-lg hover:scale-105';
+            
+            // Show selected content
+            document.getElementById(tabName + '-content').classList.remove('hidden');
+            
+            // Add active styling to selected tab
+            document.getElementById(tabName + '-tab').className = 'w-full group relative overflow-hidden rounded-2xl transition-all duration-300 bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/25 transform scale-105';
+            
+            // Knowledge Base tab clicked - no special action needed
+        }
+
+        function setMessage(text) {
+            document.getElementById('message-input').value = text;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+            if (!message || isTyping) return;
+
+            // Add user message
+            addMessage('user', message);
+            input.value = '';
+
+            // Simulate AI response
+            isTyping = true;
+            setTimeout(() => {
+                const responses = [
+                    `I understand you're asking about "${message}". The RAG system is analyzing your documents to provide the most relevant information.`,
+                    `Great question! Based on your query, I found several relevant documents in the knowledge base that can help answer this.`,
+                    `That's an interesting question about "${message}". Let me search through the uploaded documents for the most accurate information.`,
+                    `I've processed your question and found relevant information in the knowledge base. Here's what I discovered about "${message}".`,
+                    `Excellent question! The RAG system has identified several key documents that contain information related to "${message}".`
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage('ai', randomResponse);
+                isTyping = false;
+            }, 2000);
+        }
+
+        function addMessage(type, content) {
+            const messagesContainer = document.getElementById('messages');
+            
+            // Clear the welcome message if it exists
+            if (messages.length === 0) {
+                messagesContainer.innerHTML = '';
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${type === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`;
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="message-bubble ${type === 'user' ? 'message-user' : 'message-ai'}">
+                    <div class="whitespace-pre-wrap leading-relaxed">${content}</div>
+                    <div class="text-xs mt-2 ${type === 'user' ? 'text-blue-100' : 'text-gray-500'}">${time}</div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            messages.push({ type, content });
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // File upload functionality
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+            
+            // Show progress bar
+            const progressDiv = document.getElementById('upload-progress');
+            const progressBar = document.getElementById('progress-bar');
+            const statusText = document.getElementById('upload-status');
+            
+            progressDiv.classList.remove('hidden');
+            progressBar.style.width = '0%';
+            statusText.textContent = `Uploading ${files.length} file(s)...`;
+            
+            // Upload files one by one
+            uploadFiles(Array.from(files), 0, progressBar, statusText);
+        }
+
+        async function uploadFiles(files, index, progressBar, statusText) {
+            if (index >= files.length) {
+                // All files uploaded
+                progressBar.style.width = '100%';
+                statusText.textContent = `Successfully uploaded ${files.length} file(s)!`;
+                
+                // Hide progress after 3 seconds and refresh stats
+                setTimeout(() => {
+                    document.getElementById('upload-progress').classList.add('hidden');
+                    loadStats(); // Refresh the stats
+                }, 3000);
+                return;
+            }
+
+            const file = files[index];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                statusText.textContent = `Uploading ${file.name}... (${index + 1}/${files.length})`;
+                
+                const response = await fetch('http://localhost:8000/api/v1/documents/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // Update progress
+                    const progress = ((index + 1) / files.length) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    // Upload next file
+                    setTimeout(() => uploadFiles(files, index + 1, progressBar, statusText), 500);
+                } else {
+                    const error = await response.text();
+                    console.error(`❌ Upload failed for ${file.name}:`, error);
+                    statusText.textContent = `Error uploading ${file.name}. Check console for details.`;
+                    statusText.className = 'text-sm text-red-600 mt-2';
+                }
+            } catch (error) {
+                console.error(`❌ Upload error for ${file.name}:`, error);
+                statusText.textContent = `Error uploading ${file.name}: ${error.message}`;
+                statusText.className = 'text-sm text-red-600 mt-2';
+            }
+        }
+
+        // Load stats from backend
+        async function loadStats() {
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/learning/stats');
+                if (response.ok) {
+                    const stats = await response.json();
+                    const docsElement = document.getElementById('stats-documents');
+                    const chunksElement = document.getElementById('stats-chunks');
+                    
+                    if (docsElement) {
+                        docsElement.textContent = stats.total_documents || 0;
+                    }
+                    if (chunksElement) {
+                        chunksElement.textContent = stats.total_chunks || 0;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+
+        // Initialize with chat tab
+        showTab('chat');
+        
+        // Load initial stats
+        loadStats();
+        
+        // If Knowledge Base tab is accessed directly, load documents
+        if (window.location.hash === '#documents') {
+            showTab('documents');
+        }
+        
+        
+    </script>
+</body>
+</html>

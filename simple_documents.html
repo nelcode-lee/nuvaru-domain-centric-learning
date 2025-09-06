@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Documents - Nuvaru RAG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-6xl mx-auto">
+            <!-- Navigation -->
+            <div class="flex justify-center mb-8">
+                <div class="flex space-x-2">
+                    <a href="index.html" class="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">🏠 Portal</a>
+                    <a href="beautiful_frontend.html" class="px-4 py-2 text-sm bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors">💬 Chat</a>
+                    <a href="http://localhost:8000/docs" target="_blank" class="px-4 py-2 text-sm bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg transition-colors">📖 API Docs</a>
+                </div>
+            </div>
+            <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Your Knowledge Base</h1>
+            <p class="text-center text-gray-600 mb-8">Here are all your uploaded documents</p>
+            
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <div id="documents-list" class="space-y-4">
+                    <div class="text-center py-8">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+                        <p class="text-gray-600 mt-4 text-lg">Loading your documents...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadDocuments() {
+            const documentsList = document.getElementById('documents-list');
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/documents');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.documents && data.documents.length > 0) {
+                        documentsList.innerHTML = data.documents.map((doc, index) => `
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 hover:shadow-lg transition-all duration-200">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center">
+                                            <span class="text-white text-2xl">📄</span>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-gray-800 text-xl">${doc.filename}</h3>
+                                            <p class="text-gray-600">
+                                                ${doc.content_type} • ${Math.round(doc.size / 1024)}KB • ${doc.chunks_count} chunks
+                                            </p>
+                                            <p class="text-sm text-gray-500 mt-1">
+                                                Status: ${doc.status} • Uploaded: ${new Date(doc.created_at).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                                            Processed
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        documentsList.innerHTML = `
+                            <div class="text-center py-16">
+                                <div class="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <span class="text-4xl">📄</span>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-3">No documents found</h3>
+                                <p class="text-gray-600">No documents have been uploaded yet.</p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    console.error('❌ API Error:', response.status);
+                    documentsList.innerHTML = `
+                        <div class="text-center py-16">
+                            <div class="w-24 h-24 bg-red-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <span class="text-4xl">⚠️</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-3">Error loading documents</h3>
+                            <p class="text-gray-600 mb-4">Status: ${response.status}</p>
+                            <button onclick="loadDocuments()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
+                                Try Again
+                            </button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('❌ Network Error:', error);
+                documentsList.innerHTML = `
+                    <div class="text-center py-16">
+                        <div class="w-24 h-24 bg-red-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-4xl">⚠️</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Connection Error</h3>
+                        <p class="text-gray-600 mb-4">${error.message}</p>
+                        <button onclick="loadDocuments()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Load documents immediately when page loads
+        window.onload = function() {
+            loadDocuments();
+        };
+    </script>
+</body>
+</html>

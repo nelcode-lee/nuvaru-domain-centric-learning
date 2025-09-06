@@ -1,0 +1,6 @@
+node_modules/
+venv/
+s3_test_env/
+*.pyc
+__pycache__/
+.env

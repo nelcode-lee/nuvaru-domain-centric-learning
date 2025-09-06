@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuvaru RAG System - Access Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold text-gray-800 mb-8">🚀 Nuvaru RAG System</h1>
+            <p class="text-xl text-gray-600 mb-12">Your AI-powered knowledge base is ready!</p>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Main Frontend -->
+                <div class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-white text-2xl">💬</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Main Interface</h2>
+                    <p class="text-gray-600 mb-6">Full-featured chat interface with document upload and management</p>
+                    <a href="beautiful_frontend.html" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold py-3 px-8 rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl inline-block">
+                        Open Main Interface
+                    </a>
+                </div>
+                
+                <!-- Documents View -->
+                <div class="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-white text-2xl">📚</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Document Viewer</h2>
+                    <p class="text-gray-600 mb-6">Simple, clean view of all your uploaded documents</p>
+                    <a href="simple_documents.html" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold py-3 px-8 rounded-2xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl inline-block">
+                        View Documents
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-white rounded-2xl shadow-xl p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">🔧 System Tools</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="http://localhost:8000/docs" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-6 rounded-xl transition-colors">
+                        📚 API Documentation
+                    </a>
+                    <a href="http://localhost:8000/health" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-6 rounded-xl transition-colors">
+                        ❤️ Health Check
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-blue-50 rounded-2xl shadow-xl p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">🚀 Quick Access</h3>
+                <p class="text-gray-600 mb-6">Direct links to all interfaces:</p>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <a href="beautiful_frontend.html" class="block bg-blue-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+                            💬 Main Chat Interface
+                        </a>
+                        <a href="simple_documents.html" class="block bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
+                            📚 Document Viewer
+                        </a>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="http://localhost:8000/docs" target="_blank" class="block bg-purple-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors">
+                            📖 API Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-purple-50 rounded-2xl shadow-xl p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">📖 Knowledge Base API</h3>
+                <p class="text-gray-600 mb-6">Access the complete API documentation for developers and integrations:</p>
+                <div class="text-center">
+                    <a href="http://localhost:8000/docs" target="_blank" class="inline-block bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-bold py-4 px-8 rounded-2xl hover:from-purple-600 hover:to-indigo-600 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        📖 Open API Documentation
+                    </a>
+                    <p class="text-sm text-gray-500 mt-4">Interactive Swagger UI with all endpoints</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-sm text-gray-500">
+                <p>Backend API: http://localhost:8000</p>
+                <p>Frontend Server: http://localhost:8080</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

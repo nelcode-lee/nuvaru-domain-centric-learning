@@ -1,0 +1,13 @@
+# Minimal requirements for RAG system development
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+sqlalchemy
+requests
+python-dotenv
+structlog
+numpy
+
+
+
