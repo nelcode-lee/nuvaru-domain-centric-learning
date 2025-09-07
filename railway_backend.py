@@ -6,9 +6,11 @@ Simplified for reliable deployment
 
 import os
 import logging
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel, EmailStr
+from typing import Optional
 import uvicorn
 
 # Configure logging
@@ -29,6 +31,76 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Simple user models for demo
+class UserCreate(BaseModel):
+    email: EmailStr
+    username: str
+    password: str
+    full_name: Optional[str] = None
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    expires_in: int
+    user: Optional[dict] = None
+
+# Simple in-memory user storage (for demo purposes)
+users_db = {}
+
+@app.post("/auth/register", response_model=dict)
+async def register(user_data: UserCreate):
+    """Register a new user"""
+    if user_data.username in users_db:
+        raise HTTPException(status_code=400, detail="Username already taken")
+    
+    # Simple user creation (in production, use proper password hashing)
+    users_db[user_data.username] = {
+        "id": len(users_db) + 1,
+        "email": user_data.email,
+        "username": user_data.username,
+        "password": user_data.password,  # In production, hash this
+        "full_name": user_data.full_name,
+        "is_active": True
+    }
+    
+    return {
+        "id": users_db[user_data.username]["id"],
+        "email": user_data.email,
+        "username": user_data.username,
+        "full_name": user_data.full_name,
+        "is_active": True
+    }
+
+@app.post("/auth/login", response_model=Token)
+async def login(user_credentials: UserLogin):
+    """Login user and return access token"""
+    user = users_db.get(user_credentials.username)
+    
+    if not user or user["password"] != user_credentials.password:
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
+    
+    if not user["is_active"]:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    
+    # Simple token (in production, use proper JWT)
+    access_token = f"demo_token_{user['id']}_{user['username']}"
+    
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        expires_in=30,
+        user={
+            "id": user["id"],
+            "email": user["email"],
+            "username": user["username"],
+            "full_name": user["full_name"]
+        }
+    )
 
 @app.get("/")
 async def root():
